@@ -1,0 +1,53 @@
+name: ivette
+
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  # Core R
+  - r-base=4.5
+
+  # Bioconductor packages
+  - bioconductor-affy
+  - bioconductor-limma
+  - bioconductor-roastgsa
+
+  # CRAN packages via conda-forge
+  - r-cluster
+  - r-hwriter
+  - r-multcomp
+  - r-amap
+  - r-gtools
+  - r-quantreg
+  - r-lme4
+  - r-lmertest
+  - r-psych
+  - r-ggplot2
+  - r-ggrepel
+  - r-eulerr
+  - r-venndiagram
+  - r-colorspace
+  - r-ppcor
+  - r-randomforest
+  - r-proc
+  - r-glmnet
+  - r-minpack.lm
+  - r-drc
+  - r-combinat
+
+  # “tidy” stats & reporting stack
+  - r-ggpubr
+  - r-rstatix
+  - r-ggtext
+  - r-openxlsx
+  - r-hmisc
+  - r-gt
+  - r-emmeans
+  - r-gtsummary
+  - r-patchwork
+# Missing dependencies, must be installed from R directly:
+# install.packages("Minirand")
+# install.packages("iq")
+# install.packages("remotes")
+# remotes::install_github("marchtaylor/sinkr")
