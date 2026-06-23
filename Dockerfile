@@ -1,6 +1,6 @@
 FROM r-base:latest
 LABEL maintainer="Diego Fuentes <dfuentesp@tauli.cat>"
-LABEL description="Reproducible R environment for the project IVETTE, including Bioconductor and CRAN packages."
+LABEL description="Reproducible R environment for the project IVETTE"
 
 # System dependencies commonly needed to compile CRAN/Bioconductor packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -60,11 +60,6 @@ RUN R -e "install.packages(c( \
 # Missing dependencies, sinkr from GitHub (marchtaylor/sinkr)
 RUN R -e "remotes::install_github('marchtaylor/sinkr')"
 
-# Default workdir for your R scripts
 WORKDIR /usr/src/app
-
-# Copy your R scripts into the image (optional; adjust to your repo layout)
 COPY ./code/ ./scripts/
-
-# Example default command (override as needed)
 CMD [\"Rscript\", \"scripts/0.analysis_main.R\"]
