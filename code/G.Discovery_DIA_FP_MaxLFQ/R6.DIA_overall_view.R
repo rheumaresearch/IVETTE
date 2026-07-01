@@ -1,21 +1,21 @@
 #################################################################################################################
 #################################################################################################################
-### R.For_drafts/R6.DIA_overall_view.R
+### G.Discovery_DIA_FP_MaxLFQ/R6.DIA_overall_view.R
 ### Project: jcalvet_202110_marato
 #################################################################################################################
 #################################################################################################################
 # Libraries, paths and options
 
 rm(list = ls())
-.res <- paste0(.res0, "R.For_drafts/R6.DIA_overall_view/")
+.res <- paste0(.res0, "G.Discovery_DIA_FP_MaxLFQ/R6.DIA_overall_view/")
 dir.create(.res, F, T)
 
 #################################################################################################################
 # Merge differential expression results for PRM
 
 rm(list = ls())
-nd <- readRDS(paste0(.res0, "G.Discovery_DIA_FP_MaxLFQ/G1.Read_data/nd.fp.eof.rds"))
-source("code/functions/assoc.pc.R")
+nd <- readRDS(paste0(.dat, "1_DIA/nd.fp.rds"))
+# source("code/functions/assoc.pc.R")
 source("code/functions/make_transparent.R")
 
 pc <- prcomp(t(exprs(nd)))
@@ -57,6 +57,7 @@ legend(
   legend = rev(levels(nd$group)), cex = 1.25
 )
 dev.off()
+
 # PC1 vs PC2 with ellipses for hospitalized and non-hospitalized clusters
 # Added for the draft, to illustrate the separation of hospitalized vs non-hospitalized patients in the PCA space
 # parametric, rotated, stretched ellipse helper
@@ -141,85 +142,6 @@ legend(
 )
 
 dev.off()
-
-################################################################################################################
-# RF on whole DIA data
-
-rm(list = ls())
-nd <- readRDS(paste0(.res0, "G.Discovery_DIA_FP_MaxLFQ/G1.Read_data/nd.fp.eof.rds"))
-source("code/functions/myfuns.R")
-
-
-nd$hosp <- factor(as.numeric(nd$group %in% c("Severe", "Critical")), levels = 0:1, labels = c("Not-hospitalized", "Hospitalized"))
-
-set.seed(674932)
-rf <- randomForest(
-  x = t(exprs(nd)), y = nd$hosp,
-  ntree = 10000,
-  mtry = floor(sqrt(nrow(exprs(nd)))),
-  replace = FALSE,
-  importance = TRUE,
-  do.trace = 100
-)
-
-RNGkind("L'Ecuyer-CMRG")
-set.seed(38291)
-r <- facc(nd$hosp, rf$predicted, rf$votes[, 2], fn = paste0(.res, "ROC_hosp_rf_dia.png"))
-
-
-################################################################################################################
-# RF on whole DIA data - Critical vs Severe
-
-rm(list = ls())
-nd <- readRDS(paste0(.res0, "G.Discovery_DIA_FP_MaxLFQ/G1.Read_data/nd.fp.eof.rds"))
-source("code/functions/myfuns.R")
-
-
-nd <- nd[, nd$group %in% c("Severe", "Critical")]
-nd$group <- droplevels(nd$group)
-
-set.seed(674932)
-rf <- randomForest(
-  x = t(exprs(nd)), y = nd$group,
-  ntree = 10000,
-  mtry = floor(sqrt(nrow(exprs(nd)))),
-  replace = FALSE,
-  importance = TRUE,
-  do.trace = 100
-)
-
-RNGkind("L'Ecuyer-CMRG")
-set.seed(3438291)
-r <- facc(nd$group, rf$predicted, rf$votes[, 2], fn = paste0(.res, "ROC_hosp_rf_dia_cr.sev.png"))
-
-
-################################################################################################################
-# RF on whole DIA data - Severe vs MIld
-
-rm(list = ls())
-nd <- readRDS(paste0(.res0, "G.Discovery_DIA_FP_MaxLFQ/G1.Read_data/nd.fp.eof.rds"))
-source("code/functions/myfuns.R")
-
-
-nd <- nd[, nd$group %in% c("Mild", "Severe")]
-nd$group <- droplevels(nd$group)
-
-set.seed(346749)
-rf <- randomForest(
-  x = t(exprs(nd)), y = nd$group,
-  ntree = 10000,
-  mtry = floor(sqrt(nrow(exprs(nd)))),
-  replace = FALSE,
-  importance = TRUE,
-  do.trace = 100
-)
-
-RNGkind("L'Ecuyer-CMRG")
-set.seed(3829134)
-r <- facc(nd$group, rf$predicted, rf$votes[, 2], fn = paste0(.res, "ROC_hosp_rf_dia_sev.mild.png"))
-
-
-
 ################################################################################################################
 ################################################################################################################
 ################################################################################################################
