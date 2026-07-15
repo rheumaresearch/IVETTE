@@ -1,4 +1,4 @@
-FROM r-base:latest
+FROM r-base:4.5.3
 LABEL maintainer="Diego Fuentes <dfuentesp@tauli.cat>"
 LABEL description="Reproducible R environment for the project IVETTE"
 
