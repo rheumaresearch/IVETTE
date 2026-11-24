@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/1264987979.svg)](https://doi.org/10.5281/zenodo.24498251)
 # IVETTE
 
 IVETTE is the public code repository for the proteomics and clinical analysis pipeline used in the IVETTE COVID-19 study (manuscript in preparation).  
